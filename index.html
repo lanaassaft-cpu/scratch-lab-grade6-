@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>مختبر سكراتش الإبداعي</title>
+<style>
+body{font-family:Tahoma;margin:0;background:#f8f0ff;color:#38264b;text-align:center}
+header{background:linear-gradient(120deg,#74519e,#d88db8);color:white;padding:25px 10px}
+main{max-width:800px;margin:20px auto;padding:12px}
+nav{display:flex;flex-wrap:wrap;justify-content:center;background:white;padding:10px}
+button{background:#8059a7;color:white;border:0;border-radius:12px;padding:12px;margin:5px;font-size:15px}
+section{display:none;background:white;border-radius:18px;padding:20px;margin:15px 0}
+section.active{display:block}
+.card{background:#f7efff;padding:15px;margin:10px;border-radius:12px}
+h2{color:#8059a7}
+input{margin:8px}
+#maze{display:grid;grid-template-columns:repeat(5,48px);gap:5px;justify-content:center;margin:20px}
+.cell{width:48px;height:48px;background:#eee3fa;border-radius:7px;display:grid;place-items:center;font-size:22px}
+.wall{background:#75549b}.goal{background:#d8f5e7}.player{background:#ffd4e8}
+footer{padding:20px;color:#765b88}
+</style>
+</head>
+<body>
+<header>
+<h1>🌟 مختبر سكراتش الإبداعي 🌟</h1>
+<p>نتعلم باللعب ونبدع بالبرمجة</p>
+<p>المملكة العربية السعودية | وزارة التعليم</p>
+<p>الإدارة العامة للتعليم بالطائف</p>
+<p>ابتدائية قديرة</p>
+<p>المديرة: نادية السيالي</p>
+<p>المعلمة: قمراء القحطاني</p>
+</header>
+<nav>
+<button onclick="show('home')">الرئيسية</button>
+<button onclick="show('move')">تحدي الحركة</button>
+<button onclick="show('mazePage')">المتاهة</button>
+<button onclick="show('story')">القصة</button>
+<button onclick="show('stars')">صيد النجوم</button>
+<button onclick="show('quiz')">الاختبار</button>
+</nav>
+<main>
+<section id="home" class="active">
+<h2>أهلًا بالمبرمجة الصغيرة 👩‍💻</h2>
+<p>مرحبًا بك في مختبر سكراتش! اختاري نشاطًا وابدئي التحدي.</p>
+<div class="card">🎮 تحدي تحريك الشخصية</div>
+<div class="card">🧩 متاهة البرمجة</div>
+<div class="card">📖 قصة ريم والروبوت</div>
+<div class="card">⭐ صيد النجوم</div>
+<div class="card">📝 اختبار المهارات</div>
+</section>
+
+<section id="move">
+<h2>🎮 تحدي الحركة</h2>
+<p>رتبي الأوامر لتصل القطة إلى العلم.</p>
+<p>الأمر الأول</p>
+<select id="a"><option value="">اختاري</option><option value="m">تحرك 10 خطوات</option><option value="j">اقفز</option></select>
+<p>الأمر الثاني</p>
+<select id="b"><option value="">اختاري</option><option value="m">تحرك 10 خطوات</option><option value="j">اقفز</option></select>
+<p>الأمر الثالث</p>
+<select id="c"><option value="">اختاري</option><option value="m">تحرك 10 خطوات</option><option value="j">اقفز</option></select>
+<br><button onclick="checkMove()">تحققي من الحل</button>
+<p id="moveResult"></p>
+</section>
+
+<section id="mazePage">
+<h2>🧩 متاهة البرمجة</h2>
+<p>وجهي القطة إلى النجمة وتجنبي الجدران.</p>
+<div id="maze"></div>
+<button onclick="move(0,-1)">⬆️</button>
+<button onclick="move(-1,0)">➡️</button>
+<button onclick="move(0,1)">⬇️</button>
+<button onclick="move(1,0)">⬅️</button>
+<button onclick="resetMaze()">إعادة</button>
+<p id="mazeResult">ابدئي التحدي!</p>
+</section>
+
+<section id="story">
+<h2>📖 ريم والروبوت الذكي</h2>
+<p id="storyText">وجدت ريم روبوتًا يحتاج إلى الوصول لمركز الطاقة. كيف تساعدينه؟</p>
+<button onclick="story(true)">أستخدم الخريطة وأخطط</button>
+<button onclick="story(false)">أتحرك عشوائيًا</button>
+<p id="storyResult"></p>
+<button onclick="resetStory()">إعادة القصة</button>
+</section>
+
+<section id="stars">
+<h2>⭐ صيد النجوم</h2>
+<p>اجمعي النجوم خلال 15 ثانية.</p>
+<h1 id="score">0 ⭐</h1>
+<button onclick="startGame()">ابدئي اللعب</button>
+<button id="catch" onclick="catchStar()" disabled>التقطي النجمة ⭐</button>
+<p id="gameResult"></p>
+</section>
+
+<section id="quiz">
+<h2>📝 اختبري نفسك</h2>
+<div class="card">
+<p>1- ما البرنامج المستخدم لإنشاء الألعاب التفاعلية؟</p>
+<label><input type="radio" name="q1" value="a"> الرسام</label>
+<label><input type="radio" name="q1" value="b"> سكراتش</label>
+<label><input type="radio" name="q1" value="c"> الآلة الحاسبة</label>
+</div>
+<div class="card">
+<p>2- ماذا نسمي الشخصية في سكراتش؟</p>
+<label><input type="radio" name="q2" value="a"> الكائن</label>
+<label><input type="radio" name="q2" value="b"> الخلفية</label>
+<label><input type="radio" name="q2" value="c"> الملف</label>
+</div>
+<div class="card">
+<p>3- ما فائدة ترتيب اللبنات؟</p>
+<label><input type="radio" name="q3" value="a"> تنفيذ الأوامر بالترتيب</label>
+<label><input type="radio" name="q3" value="b"> حذف المشروع</label>
+<label><input type="radio" name="q3" value="c"> تغيير الشاشة</label>
+</div>
+<div class="card">
+<p>4- أي أمر يحرك الكائن؟</p>
+<label><input type="radio" name="q4" value="a"> تحرك 10 خطوات</label>
+<label><input type="radio" name="q4" value="b"> انتظر</label>
+<label><input type="radio" name="q4" value="c"> قل مرحبًا</label>
+</div>
+<div class="card">
+<p>5- ماذا نفعل عند حدوث خطأ؟</p>
+<label><input type="radio" name="q5" value="a"> نتوقف</label>
+<label><input type="radio" name="q5" value="b"> نراجع الأوامر ونصححها</label>
+<label><input type="radio" name="q5" value="c"> نحذف البرنامج</label>
+</div>
+<button onclick="grade()">إرسال الإجابات</button>
+<h3 id="quizResult"></h3>
+</section>
+</main>
+<footer>إعداد المعلمة: قمراء القحطاني | ابتدائية قديرة</footer>
+<script>
+function show(id){
+document.querySelectorAll('main section').forEach(s=>s.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+}
+function checkMove(){
+let ok=document.getElementById('a').value==='m'&&document.getElementById('b').value==='m'&&document.getElementById('c').value==='j';
+document.getElementById('moveResult').textContent=ok?'أحسنتِ! إجابة صحيحة 🎉':'حاولي مرة أخرى: حركة، حركة، ثم قفز.';
+}
+let walls=[[1,0],[1,1],[3,1],[1,3],[2,3],[3,3],[3,4]],px=0,py=0;
+function drawMaze(){
+let h='';
+for(let y=0;y<5;y++)for(let x=0;x<5;x++){
+let cls='cell',v='';
+if(walls.some(p=>p[0]===x&&p[1]===y))cls+=' wall';
+else if(x===4&&y===4){cls+=' goal';v='⭐';}
+else if(x===px&&y===py){cls+=' player';v='🐱';}
+h+='<div class="'+cls+'">'+v+'</div>';
+}
+document.getElementById('maze').innerHTML=h;
+}
+function move(dx,dy){
+let x=px+dx,y=py+dy;
+if(x<0||x>4||y<0||y>4||walls.some(p=>p[0]===x&&p[1]===y)){
+document.getElementById('mazeResult').textContent='الطريق مغلق! جربي اتجاهًا آخر.';return;
+}
+px=x;py=y;drawMaze();
+document.getElementById('mazeResult').textContent=x===4&&y===4?'رائعة! وصلتِ إلى النجمة 🏆':'تابعي التقدم!';
+}
+function resetMaze(){px=0;py=0;drawMaze();document.getElementById('mazeResult').textContent='ابدئي من جديد!'}
+drawMaze();
+function story(ok){
+document.getElementById('storyText').textContent=ok?'استخدمت ريم الخريطة وحددت الطريق الصحيح، فوصل الروبوت إلى مركز الطاقة وأضاء المدينة!':'تحرك الروبوت عشوائيًا وابتعد عن هدفه.';
+document.getElementById('storyResult').textContent=ok?'أحسنتِ! التخطيط يساعد على حل المشكلات 🌟':'حاولي مرة أخرى باستخدام الخريطة.';
+}
+function resetStory(){
+document.getElementById('storyText').textContent='وجدت ريم روبوتًا يحتاج إلى الوصول لمركز الطاقة. كيف تساعدينه؟';
+document.getElementById('storyResult').textContent='';
+}
+let score=0,time=15,timer;
+function startGame(){
+clearInterval(timer);score=0;time=15;
+document.getElementById('score').textContent='0 ⭐';
+document.getElementById('catch').disabled=false;
+document.getElementById('gameResult').textContent='الوقت: 15 ثانية';
+timer=setInterval(()=>{
+time--;
+document.getElementById('gameResult').textContent='الوقت المتبقي: '+time;
+if(time<=0){
+clearInterval(timer);
+document.getElementById('catch').disabled=true;
+document.getElementById('gameResult').textContent='انتهى الوقت! نتيجتك '+score+' نجمة 🎉';
+}
+},1000);
+}
+function catchStar(){
+score++;
+document.getElementById('score').textContent=score+' ⭐';
+}
+function grade(){
+let answers={q1:'b',q2:'a',q3:'a',q4:'a',q5:'b'},n=0;
+for(let k in answers){
+let v=document.querySelector('input[name="'+k+'"]:checked');
+if(v&&v.value===answers[k])n++;
+}
+document.getElementById('quizResult').textContent='نتيجتك '+n+' من 5 '+(n===5?'ممتازة يا بطلة! 🏆':'أحسنتِ، واصلي التعلم!');
+}
+</script>
+</body>
+</html>
